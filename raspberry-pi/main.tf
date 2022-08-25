@@ -77,6 +77,10 @@ resource "null_resource" "raspberry_pi_setup" {
       # Configure GPU memory
       "echo 'gpu_mem=8' | sudo tee -a /boot/config.txt",
 
+      # Needed for k3s to start up on rpi4 x64
+      "sudo sed 's/$/ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1/' /boot/cmdline.txt > cmdline-new.txt",
+      "sudo mv cmdline-new.txt /boot/cmdline.txt",
+
       # Reboot pi
       "sudo shutdown -r +0"
     ]
