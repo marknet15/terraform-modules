@@ -20,6 +20,7 @@ resource "digitalocean_droplet" "droplet" {
   monitoring    = var.enable_monitoring
   droplet_agent = var.enable_droplet_agent
   ssh_keys      = [data.digitalocean_ssh_key.key.id]
+  tags          = var.tags
 
   lifecycle {
     create_before_destroy = true
@@ -33,12 +34,12 @@ resource "digitalocean_firewall" "droplet_firewall" {
   droplet_ids = [digitalocean_droplet.droplet.id]
 
   dynamic "inbound_rule" {
-    iterator = port
-    for_each = var.allowed_ports
+    for_each = var.rules
+
     content {
-      port_range       = port.value
-      protocol         = var.protocol
-      source_addresses = var.allowed_ip
+      port_range       = inbound_rule.value.port
+      protocol         = inbound_rule.value.protocol
+      source_addresses = inbound_rule.value.ip_ranges
     }
   }
 

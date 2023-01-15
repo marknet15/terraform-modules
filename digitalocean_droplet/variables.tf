@@ -22,6 +22,12 @@ variable "size" {
   default     = "s-1vcpu-1gb"
 }
 
+variable "tags" {
+  description = "Size of the droplet to create"
+  type        = list(string)
+  default     = ["terraform"]
+}
+
 variable "ssh_key" {
   description = "SSH keys to add to the droplet"
   type        = string
@@ -46,20 +52,14 @@ variable "enable_droplet_agent" {
 }
 
 ## Firewall
-variable "allowed_ip" {
-  type        = list(any)
+variable "rules" {
+  type = list(object({
+    port      = number,
+    protocol  = string,
+    ip_ranges = list(string)
+  }))
   default     = []
-  description = "Allow list of IPs"
+  description = "List of allowed ingress rules."
 }
 
-variable "allowed_ports" {
-  type        = list(any)
-  default     = []
-  description = "List of allowed ingress ports."
-}
 
-variable "protocol" {
-  type        = string
-  default     = "tcp"
-  description = "The protocol of the port being allowed"
-}
