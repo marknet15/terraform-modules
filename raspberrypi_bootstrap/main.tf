@@ -60,7 +60,7 @@ resource "null_resource" "raspberry_pi_setup" {
       "sudo apt-get upgrade -y",
       "sudo apt-get dist-upgrade -y",
       "sudo apt-get --fix-broken install -y",
-      "sudo apt-get install dnsutils git vim htop ncdu build-essential libssl-dev libffi-dev -y",
+      "sudo apt-get install dnsutils git vim htop ncdu build-essential libssl-dev libffi-dev rustc -y",
 
       # Install Python
       "sudo apt-get purge python-minimal -y",
@@ -68,8 +68,9 @@ resource "null_resource" "raspberry_pi_setup" {
       "sudo apt-get autoremove -y",
       "sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1",
       "sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1",
-      "sudo pip install pip --upgrade",
+      "sudo pip install pip setuptools setuptools_rust --upgrade",
       "sudo pip install urllib3 requests poetry --upgrade",
+      "sudo pip install bcrypt==3.2.2",
 
       # Configure networking interface
       "echo 'interface eth0\nstatic ip_address=${each.value}${var.subnet_mask}\nstatic routers=${var.gateway}\nstatic domain_name_servers=${var.nameserver}' | cat >> /etc/dhcpcd.conf",
