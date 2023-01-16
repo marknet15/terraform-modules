@@ -62,4 +62,17 @@ variable "rules" {
   description = "List of allowed ingress rules."
 }
 
+## Volumes
+
+variable "volumes" {
+  type = list(object({
+    name        = string,
+    size        = number,
+    region      = string
+    description = string
+  }))
+  default     = []
+  description = "List of volumes to create and attach."
+}
+
 
